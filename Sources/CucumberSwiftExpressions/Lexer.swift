@@ -8,16 +8,9 @@
 
 import Foundation
 public final class Lexer: StringReader {
-    internal var url: URL?
-
-    public init(_ str: String, uri: String) {
-        url = URL(string: uri)
-        super.init(str)
-    }
-
     override public var position: Position {
         let pos = super.position
-        return Position(line: pos.line, column: pos.column, uri: url)
+        return Position(line: pos.line, column: pos.column)
     }
 
     @discardableResult private func advance<T>(_ t:@autoclosure () -> T) -> T {
@@ -112,10 +105,10 @@ public final class Lexer: StringReader {
     }
 
     public func lex() -> [Token] {
-        var toks = [Token]()
-        while let tok = advanceToNextToken() {
-            toks.append(tok)
+        var tokens = [Token]()
+        while let token = advanceToNextToken() {
+            tokens.append(token)
         }
-        return toks
+        return tokens
     }
 }

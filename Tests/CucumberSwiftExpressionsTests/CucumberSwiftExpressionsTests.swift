@@ -3,7 +3,7 @@ import XCTest
 
 final class CucumberSwiftExpressionsTests: XCTestCase {
     func testExample() throws {
-        let tokens = Lexer(#"there is/are/were {int} flight(s) from {airport}"#, uri: "notHere").lex()
+        let tokens = Lexer(#"there is/are/were {int} flight(s) from {airport}"#).lex()
         print(tokens)
     }
 }

@@ -11,8 +11,8 @@ import Foundation
 public class StringReader {
     let input: String
     public private(set) var index: String.Index
-    public var position: Lexer.Position {
-        Lexer.Position(line: line, column: column)
+    public var position: Position {
+        Position(line: line, column: column)
     }
 
     private var line: UInt = 1

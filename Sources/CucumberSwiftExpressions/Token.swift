@@ -10,13 +10,13 @@ import Foundation
 
 extension Lexer {
     public enum Token: Equatable, Hashable {
-        case whitespace(Lexer.Position, String)
-        case parameter(Lexer.Position, String)
-        case alternate(Lexer.Position, [String])
-        case optional(Lexer.Position, String)
-        case literal(Lexer.Position, String)
+        case whitespace(Position, String)
+        case parameter(Position, String)
+        case alternate(Position, [String])
+        case optional(Position, String)
+        case literal(Position, String)
 
-        public var position: Lexer.Position {
+        public var position: Position {
             switch self {
                 case .whitespace(let pos, _): return pos
                 case .parameter(let pos, _): return pos
@@ -26,11 +26,16 @@ extension Lexer {
             }
         }
 
-        #warning("FIXME")
         public static func == (lhs: Token, rhs: Token) -> Bool {
             switch (lhs, rhs) {
                 case (.whitespace(_, let w1), .whitespace(_, let w2)):
                     return w1 == w2
+                case (.parameter(_, let string1), .parameter(_, let string2)):
+                    return string1 == string2
+                case (.alternate(_, let stringArr1), .alternate(_, let stringArr2)):
+                    return stringArr1 == stringArr2
+                case (.optional(_, let string1), .optional(_, let string2)):
+                    return string1 == string2
                 case (.literal(_, let string1), .literal(_, let string2)):
                     return string1 == string2
                 default:
