@@ -81,7 +81,7 @@ final class Lexer: StringReader {
                 advanceIndex()
                 continue
             }
-            
+
             str.append(char)
             advanceIndex()
         }

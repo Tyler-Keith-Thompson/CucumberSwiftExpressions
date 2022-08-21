@@ -12,7 +12,7 @@ public struct CucumberExpression: ExpressibleByStringLiteral {
     private let tokens: [Lexer.Token]
 
     public lazy var regex: String = {
-        return tokens
+        tokens
             .lazy
             .map {
                 switch $0 {

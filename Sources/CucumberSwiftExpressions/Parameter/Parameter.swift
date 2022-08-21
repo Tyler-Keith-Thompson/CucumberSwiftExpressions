@@ -12,7 +12,7 @@ public protocol Parameter {
     associatedtype Output
 
     static var name: String { get }
-    
+
     var regexMatch: String { get }
 
     func convert(input: String) throws -> Output

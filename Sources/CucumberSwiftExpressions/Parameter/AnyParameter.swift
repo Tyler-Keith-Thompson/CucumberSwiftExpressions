@@ -25,7 +25,7 @@ public final class AnyParameter {
     }
 }
 
-fileprivate class AnyParameterBase {
+private class AnyParameterBase {
     var regexMatch: String {
         fatalError("regexMatch should've been overridden. This represents an internal library error.")
     }
