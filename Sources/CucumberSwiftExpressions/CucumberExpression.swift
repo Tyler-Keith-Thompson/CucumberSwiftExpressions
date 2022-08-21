@@ -19,12 +19,15 @@ public struct CucumberExpression: ExpressibleByStringLiteral {
                     case .whitespace(_, let val):
                         return val
                     case .parameter(_, let parameterName):
+                        if let lookup = Self.parameterLookup[parameterName] {
+                            return "(\(lookup.regexMatch))"
+                        }
                         return ""
                     case .alternate(_, let alternates):
-                        return "(?:\(alternates.lazy.map(NSRegularExpression.escapedPattern(for:)).joined(separator: "|")))"
+                        return "(\(alternates.lazy.map(NSRegularExpression.escapedPattern(for:)).joined(separator: "|")))"
                     case .optional(_, let optionalText):
                         let escapedText = NSRegularExpression.escapedPattern(for: optionalText)
-                        return "(?:\(escapedText))?"
+                        return "(\(escapedText))?"
                     case .literal(_, let val):
                         return NSRegularExpression.escapedPattern(for: val)
                 }
@@ -40,4 +43,19 @@ public struct CucumberExpression: ExpressibleByStringLiteral {
     public init(_ str: String) {
         tokens = Lexer(str).lex()
     }
+}
+
+extension CucumberExpression {
+    static let parameters: [AnyParameter] = {
+        [
+            Parameters.string.eraseToAnyParameter(),
+            Parameters.int.eraseToAnyParameter()
+        ]
+    }()
+
+    static var parameterLookup: [String: AnyParameter] = {
+        parameters
+            .reduce(into: [:]) { $0[$1.name] = $1 }
+            .merging((Self.self as? CustomParameters.Type)?.parameterLookup ?? [:]) { $1 }
+    }()
 }
