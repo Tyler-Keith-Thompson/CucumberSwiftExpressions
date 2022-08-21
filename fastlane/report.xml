@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: Verifying fastlane version" time="0.066877">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.000612">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: clear_derived_data" time="0.00062">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: version_bump_podspec" time="0.042363">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
