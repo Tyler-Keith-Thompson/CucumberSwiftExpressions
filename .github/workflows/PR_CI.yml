@@ -8,9 +8,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run TESTS
-        run: fastlane unit_test
+        run: swift test -v --enable-code-coverage
       - name: Convert code coverage
-        run: xcrun llvm-cov export -format="lcov" -instr-profile=$(find .build -name default.profdata) $(find .build -name NDHpplePackageTests) > info.lcov
+        run: xcrun llvm-cov export -format="lcov" -instr-profile=$(find .build -name default.profdata) $(find .build -name CucumberSwiftExpressionsPackageTests) > info.lcov
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
