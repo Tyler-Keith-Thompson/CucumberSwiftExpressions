@@ -60,6 +60,27 @@ extension Lexer {
             return false
         }
 
+        public var isParameter: Bool {
+            if case .parameter = self {
+                return true
+            }
+            return false
+        }
+
+        public var isAlternate: Bool {
+            if case .alternate = self {
+                return true
+            }
+            return false
+        }
+
+        public var isOptional: Bool {
+            if case .optional = self {
+                return true
+            }
+            return false
+        }
+
         public var isLiteral: Bool {
             if case .literal = self {
                 return true

@@ -7,72 +7,81 @@
 //
 
 import Foundation
-public final class Lexer: StringReader {
-    override public var position: Position {
+final class Lexer: StringReader {
+    override var position: Position {
         let pos = super.position
         return Position(line: pos.line, column: pos.column)
     }
 
-    @discardableResult private func advance<T>(_ t:@autoclosure () -> T) -> T {
+    private func advance<T>(_ t: @autoclosure () -> T) -> T {
         advanceIndex()
         return t()
     }
 
-    @discardableResult internal func readParameter() -> String {
+    private func parseEscapeSequence(char: Character) -> Character? {
+        if char.isEscapeCharacter,
+           let next = nextChar {
+            defer {
+                advanceIndex()
+                advanceIndex()
+            }
+            return next
+        }
+        return nil
+    }
+
+    private func readParameter() -> String {
         var str = ""
         while let char = currentChar {
-            if char.isEscapeCharacter,
-               let next = nextChar {
-                str.append(next)
-                advanceIndex()
-                advanceIndex()
+            if let escapedCharacter = parseEscapeSequence(char: char) {
+                str.append(escapedCharacter)
                 continue
             }
-            if char.isTrailingParameterBoundary {
+
+            guard !char.isTrailingParameterBoundary else {
                 break
             }
+
             str.append(char)
             advanceIndex()
         }
         return str
     }
 
-    @discardableResult internal func readOptional() -> String {
+    private func readOptional() -> String {
         var str = ""
         while let char = currentChar {
-            if char.isEscapeCharacter,
-               let next = nextChar {
-                str.append(next)
-                advanceIndex()
-                advanceIndex()
+            if let escapedCharacter = parseEscapeSequence(char: char) {
+                str.append(escapedCharacter)
                 continue
             }
-            if char.isTrailingOptionalBoundary {
+
+            guard !char.isTrailingOptionalBoundary else {
                 break
             }
+
             str.append(char)
             advanceIndex()
         }
         return str
     }
 
-    @discardableResult internal func readAlternates() -> [String] {
+    private func readAlternates() -> [String] {
         var alternates = [String]()
         var str = ""
         while let char = currentChar, !char.isWhitespace, !char.isLeadingParameterBoundary, !char.isLeadingOptionalBoundary {
-            if char.isEscapeCharacter,
-               let next = nextChar {
-                str.append(next)
-                advanceIndex()
-                advanceIndex()
+            if let escapedCharacter = parseEscapeSequence(char: char) {
+                str.append(escapedCharacter)
                 continue
             }
-            if char.isAlternateSeparator {
+
+            guard !char.isAlternateSeparator else {
                 alternates.append(str)
                 str = ""
                 advanceIndex()
                 continue
             }
+            
             str.append(char)
             advanceIndex()
         }
@@ -80,7 +89,7 @@ public final class Lexer: StringReader {
         return alternates
     }
 
-    internal func advanceToNextToken() -> Token? {
+    private func advanceToNextToken() -> Token? {
         guard let char = currentChar else { return nil }
         let position = position
 
@@ -104,7 +113,7 @@ public final class Lexer: StringReader {
         }
     }
 
-    public func lex() -> [Token] {
+    func lex() -> [Token] {
         var tokens = [Token]()
         while let token = advanceToNextToken() {
             tokens.append(token)
