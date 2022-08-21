@@ -1,0 +1,52 @@
+fastlane_version "2.27.0"
+default_platform :ios
+
+platform :ios do
+  before_all do
+    ENV["FASTLANE_EXPLICIT_OPEN_SIMULATOR"] = "2"
+    clear_derived_data
+  end
+
+  lane :unit_test do
+    spm(
+      command: "test",
+      build_path: "./build",
+      configuration: "debug"
+    )
+  end
+
+  lane :build_swiftpm do
+    spm(
+      command: "build",
+      build_path: "./build",
+      configuration: "release"
+    )
+  end
+
+  lane :cocoapods_liblint do
+    pod_lib_lint(podspec: 'CucumberSwiftExpressions.podspec', allow_warnings: true)
+  end
+
+  desc "Release a new version with a patch bump_type"
+  lane :patch do
+    release("patch")
+  end
+
+  desc "Release a new version with a minor bump_type"
+  lane :minor do
+    release("minor")
+  end
+
+  desc "Release a new version with a major bump_type"
+  lane :major do
+    release("major")
+  end
+
+  def release(type)
+    podspec_name = "CucumberSwiftExpressions.podspec"
+    version = version_bump_podspec(path: podspec_name,
+                                   bump_type: type)
+     echo(message: "New Version: #{version}")
+     echo(message: "##[set-output name=version;]#{version}")
+  end
+end

@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  release:
+    types: [ created ]
+
+jobs:
+  release:
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cocoapods Release
+        run: |
+          pod repo add-cdn trunk 'https://cdn.cocoapods.org/'
+          pod trunk push CucumberSwiftExpressions.podspec --allow-warnings
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+      - name: Generate DocC Static Site
+        run: |
+            swift package --allow-writing-to-directory ./docs \
+              generate-documentation --target CucumberSwiftExpressions \
+              --disable-indexing \
+              --transform-for-static-hosting \
+              --hosting-base-path CucumberSwiftExpressions/ \
+              --output-path ./docs
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+ 
