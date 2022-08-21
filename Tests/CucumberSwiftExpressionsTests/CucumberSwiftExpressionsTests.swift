@@ -32,6 +32,26 @@ final class CucumberSwiftExpressionsTests: XCTestCase {
         XCTAssertEqual(expression.regex, #"^There are (-?\d+) flights from LAX\.$"#)
     }
 
+    func testCucumberExpressionGeneratesCorrectRegexForWordParameter() {
+        var expression = CucumberExpression(#"There are {word} flights from LAX."#)
+        XCTAssertEqual(expression.regex, #"^There are ([^\s]+) flights from LAX\.$"#)
+    }
+
+    func testCucumberExpressionGeneratesCorrectRegexForFloatParameter() {
+        var expression = CucumberExpression(#"There are {float} flights from LAX."#)
+        XCTAssertEqual(expression.regex, #"^There are ((?=.*\d.*)[-+]?\d*(?:\.(?=\d.*))?\d*(?:\d+[E][+-]?\d+)?) flights from LAX\.$"#)
+    }
+
+    func testCucumberExpressionGeneratesCorrectRegexForDoubleParameter() {
+        var expression = CucumberExpression(#"There are {double} flights from LAX."#)
+        XCTAssertEqual(expression.regex, #"^There are ((?=.*\d.*)[-+]?\d*(?:\.(?=\d.*))?\d*(?:\d+[E][+-]?\d+)?) flights from LAX\.$"#)
+    }
+
+    func testCucumberExpressionGeneratesCorrectRegexForAnonymousParameter() {
+        var expression = CucumberExpression(#"There are {} flights from LAX."#)
+        XCTAssertEqual(expression.regex, #"^There are (.*) flights from LAX\.$"#)
+    }
+
     func testCucumberExpressionGeneratesCorrectRegexComplexExpression() {
         var expression = CucumberExpression(#"There is/are/were {int} flight(s) from {airport}."#)
         XCTAssertEqual(expression.regex, #"^There (is|are|were) (-?\d+) flight(s)? from ([A-Z]{3})\.$"#)

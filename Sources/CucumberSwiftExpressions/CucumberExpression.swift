@@ -49,7 +49,11 @@ extension CucumberExpression {
     static let parameters: [AnyParameter] = {
         [
             Parameters.string.eraseToAnyParameter(),
-            Parameters.int.eraseToAnyParameter()
+            Parameters.int.eraseToAnyParameter(),
+            Parameters.word.eraseToAnyParameter(),
+            Parameters.float.eraseToAnyParameter(),
+            Parameters.double.eraseToAnyParameter(),
+            Parameters.anonymous.eraseToAnyParameter()
         ]
     }()
 
