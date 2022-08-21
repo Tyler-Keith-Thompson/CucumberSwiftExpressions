@@ -9,8 +9,6 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
-      - name: Bundle install
-        run: bundle install
       - name: Cocoapods Release
         run: |
           pod repo add-cdn trunk 'https://cdn.cocoapods.org/'
