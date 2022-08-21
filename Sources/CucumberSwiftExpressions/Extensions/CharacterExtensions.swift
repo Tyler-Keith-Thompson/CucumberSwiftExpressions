@@ -16,25 +16,6 @@ extension Character {
     static let alternateSeparator: Character = "/"
     static let escapeCharacter: Character = "\\"
 
-    var value: Int32 {
-        Int32(scalar.value)
-    }
-    var scalar: UnicodeScalar! {
-        String(self).unicodeScalars.first
-    }
-    var isSpace: Bool {
-        isspace(value) != 0
-    }
-    var isAlphanumeric: Bool {
-        isalnum(value) != 0
-    }
-    var isNumeric: Bool {
-        isnumber(value) != 0
-    }
-    var isSymbol: Bool {
-        isLeadingParameterBoundary
-        || isEscapeCharacter
-    }
     var isLeadingParameterBoundary: Bool {
         self == Character.leadingParameterBoundary
     }
