@@ -16,8 +16,7 @@ public struct CucumberExpression: ExpressibleByStringLiteral {
             .lazy
             .map {
                 switch $0 {
-                    case .whitespace(_, let val):
-                        return val
+                    case .whitespace(_, let val): return val
                     case .parameter(_, let parameterName):
                         if let lookup = Self.parameterLookup[parameterName] {
                             return "(\(lookup.regexMatch))"
