@@ -23,10 +23,6 @@ platform :ios do
     )
   end
 
-  lane :cocoapods_liblint do
-    pod_lib_lint(podspec: 'CucumberSwiftExpressions.podspec', allow_warnings: true)
-  end
-
   desc "Release a new version with a patch bump_type"
   lane :patch do
     release("patch")
