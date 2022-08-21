@@ -5,6 +5,7 @@
 //  Created by Tyler Thompson on 8/20/22.
 //  Copyright © 2022 Tyler Thompson. All rights reserved.
 //
+//  swiftlint:disable file_types_order
 
 import Foundation
 

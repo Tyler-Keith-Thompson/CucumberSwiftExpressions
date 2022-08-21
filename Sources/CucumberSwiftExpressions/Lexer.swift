@@ -108,6 +108,7 @@ final class Lexer: StringReader {
                 if alternates.count > 1 {
                     return .alternate(position, alternates)
                 } else {
+                    // swiftlint:disable:next force_unwrapping
                     return .literal(position, alternates.first!)
                 }
         }

@@ -1,3 +1,5 @@
+//  swiftlint:disable file_types_order
+
 import XCTest
 import CucumberSwiftExpressions
 
@@ -58,6 +60,7 @@ final class CucumberSwiftExpressionsTests: XCTestCase {
     }
 }
 
+// swiftlint:disable:next convenience_type
 struct Airport {
     static let lax = Airport()
 }

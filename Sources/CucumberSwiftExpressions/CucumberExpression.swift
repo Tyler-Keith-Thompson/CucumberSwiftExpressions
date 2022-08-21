@@ -32,7 +32,7 @@ public struct CucumberExpression: ExpressibleByStringLiteral {
                 }
             }
             .joined()
-            .reduce("^") { $0 + String($1) } + "$"
+            .reduce(into: "^") { $0 += String($1) } + "$"
     }()
 
     public init(stringLiteral value: String) {
