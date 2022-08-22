@@ -24,6 +24,8 @@ public struct FloatParameter: Parameter {
     }
 }
 
-extension Parameters {
-    public static let float = FloatParameter()
+extension Match {
+    public var float: FloatParameter {
+        FloatParameter()
+    }
 }

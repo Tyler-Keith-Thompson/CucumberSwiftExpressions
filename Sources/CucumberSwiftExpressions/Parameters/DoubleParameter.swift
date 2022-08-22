@@ -24,6 +24,8 @@ public struct DoubleParameter: Parameter {
     }
 }
 
-extension Parameters {
-    public static let double = DoubleParameter()
+extension Match {
+    public var double: DoubleParameter {
+        DoubleParameter()
+    }
 }

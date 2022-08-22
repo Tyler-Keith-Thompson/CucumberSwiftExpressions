@@ -24,6 +24,10 @@ public final class AnyParameter {
         var param = parameter
         storage = AnyParameterStorage(&param)
     }
+
+    public func selectMatch(_ matches: [String]) -> String {
+        storage.selectMatch(matches)
+    }
 }
 
 private class AnyParameterBase {
@@ -33,6 +37,10 @@ private class AnyParameterBase {
 
     var name: String {
         fatalError("name should've been overridden. This represents an internal library error.")
+    }
+
+    func selectMatch(_ matches: [String]) -> String {
+        fatalError("selectMatch(_:) should've been overridden. This represents an internal library error.")
     }
 }
 
@@ -48,5 +56,9 @@ fileprivate final class AnyParameterStorage<P: Parameter>: AnyParameterBase {
 
     override var name: String {
         P.name
+    }
+
+    override func selectMatch(_ matches: [String]) -> String {
+        hold.selectMatch(matches)
     }
 }

@@ -14,6 +14,8 @@ public struct WordParameter: Parameter {
     public func convert(input: String) throws -> String { input }
 }
 
-extension Parameters {
-    public static let word = WordParameter()
+extension Match {
+    public var word: WordParameter {
+        WordParameter()
+    }
 }

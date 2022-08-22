@@ -24,6 +24,8 @@ public struct IntParameter: Parameter {
     }
 }
 
-extension Parameters {
-    public static let int = IntParameter()
+extension Match {
+    public var int: IntParameter {
+        IntParameter()
+    }
 }

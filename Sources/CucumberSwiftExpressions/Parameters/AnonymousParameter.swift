@@ -14,6 +14,8 @@ public struct AnonymousParameter: Parameter {
     public func convert(input: String) throws -> String { input }
 }
 
-extension Parameters {
-    public static let anonymous = AnonymousParameter()
+extension Match {
+    public var anonymous: AnonymousParameter {
+        AnonymousParameter()
+    }
 }

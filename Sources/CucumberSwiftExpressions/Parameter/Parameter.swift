@@ -16,10 +16,16 @@ public protocol Parameter {
     var regexMatch: String { get }
 
     func convert(input: String) throws -> Output
+
+    func selectMatch(_ matches: [String]) -> String
 }
 
 extension Parameter {
     public func eraseToAnyParameter() -> AnyParameter {
         AnyParameter(self)
+    }
+
+    public func selectMatch(_ matches: [String]) -> String {
+        matches[0]
     }
 }

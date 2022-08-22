@@ -12,8 +12,18 @@ public struct StringParameter: Parameter {
     public let regexMatch = #""([^"\\]*(\\.[^"\\]*)*)"|'([^'\\]*(\\.[^'\\]*)*)'"#
 
     public func convert(input: String) throws -> String { input }
+
+    public func selectMatch(_ matches: [String]) -> String {
+        // The regex for this string will return 3 matches
+        // The first is the whole match
+        // The second includes quotes
+        // The third removes those quotes
+        matches[2]
+    }
 }
 
-extension Parameters {
-    public static let string = StringParameter()
+extension Match {
+    public var string: StringParameter {
+        StringParameter()
+    }
 }
