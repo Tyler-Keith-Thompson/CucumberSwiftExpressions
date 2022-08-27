@@ -100,14 +100,14 @@ final class CucumberSwiftExpressionsTests: XCTestCase {
         XCTAssertEqual(expression.regex, #"^There are (.*) flights from LAX\.$"#)
     }
 
-//    func testAnonymousMatches() throws {
-//        let expression = CucumberExpression("There are {} flights from LAX.")
-//        let match = try XCTUnwrap(expression.match(in: #"There are some number of flights from LAX."#))
-//        XCTAssertEqual(match[\.anonymous, index: 0], "some number of")
-//        XCTAssertEqual(try match.first(\.anonymous), "some number of")
-//        XCTAssertEqual(try match.last(\.anonymous), "some number of")
-//        XCTAssertEqual(try match.allParameters(\.anonymous), ["some number of"])
-//    }
+    func testAnonymousMatches() throws {
+        let expression = CucumberExpression("There are {} flights from LAX.")
+        let match = try XCTUnwrap(expression.match(in: #"There are some number of flights from LAX."#))
+        XCTAssertEqual(match[\.anonymous, index: 0], "some number of")
+        XCTAssertEqual(try match.first(\.anonymous), "some number of")
+        XCTAssertEqual(try match.last(\.anonymous), "some number of")
+        XCTAssertEqual(try match.allParameters(\.anonymous), ["some number of"])
+    }
 
     func testCucumberExpressionGeneratesCorrectRegexComplexExpression() {
         let expression = CucumberExpression(#"There is/are/were {int} flight(s) from {airport}."#)

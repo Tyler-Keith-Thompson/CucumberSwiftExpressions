@@ -45,72 +45,42 @@ public struct CucumberExpression: ExpressibleByStringLiteral {
 
     public func match(in str: String) -> Match? {
         let match = Match()
-        var startIndex = str.startIndex
-        for token in tokens {
-            switch token {
-                case .whitespace(_, let val):
-                    guard let endIndex = str.index(startIndex, offsetBy: val.count, limitedBy: str.endIndex) else {
-                        return nil
+        let parameters = tokens.filter { $0.isParameter }
+        let matches = matches(in: str, regex: regex)
+            .dropFirst()
+                .reduce(into: [[(range: Range<String.Index>, match: String)]]()) { allMatches, tup in
+                    let (range, strMatch) = tup
+                    if let lastRange = allMatches.last?.first?.range,
+                       lastRange.contains(range.lowerBound),
+                       lastRange.contains(range.upperBound) {
+                        allMatches[allMatches.count - 1].append((range, strMatch))
+                    } else {
+                        allMatches.append([(range, strMatch)])
                     }
+                }
 
-                    let substr = String(str[startIndex..<endIndex])
+        guard matches.count == parameters.count else { return nil }
 
-                    guard substr == val else { return nil }
-
-                    startIndex = endIndex
-                case .parameter(_, let parameterName):
-                    guard let lookup = Self.parameterLookup[parameterName] else {
-                        return nil
-                    }
-
-                    let regex = "(\(lookup.regexMatch))"
-                    let substr = String(str[startIndex...])
-                    let matches = matches(in: substr, regex: regex)
-
-                    guard !matches.isEmpty else { return nil }
-
-                    match.append(token, matchedText: lookup.selectMatch(matches))
-                    startIndex = str.index(startIndex, offsetBy: matches[0].count, limitedBy: str.endIndex) ?? str.endIndex
-                case .alternate(_, let alternates):
-                    let regex = "(?:\(alternates.lazy.map(NSRegularExpression.escapedPattern(for:)).joined(separator: "|")))"
-                    let substr = String(str[startIndex...])
-                    let matches = matches(in: substr, regex: regex)
-
-                    guard !matches.isEmpty else { return nil }
-
-                    startIndex = str.index(startIndex, offsetBy: matches[0].count, limitedBy: str.endIndex) ?? str.endIndex
-                case .optional(_, let optionalText):
-                    let escapedText = NSRegularExpression.escapedPattern(for: optionalText)
-                    let regex = "(?:\(escapedText))?"
-                    let substr = String(str[startIndex...])
-                    let matches = matches(in: substr, regex: regex)
-
-                    guard !matches.isEmpty else { return nil }
-
-                    startIndex = str.index(startIndex, offsetBy: matches[0].count, limitedBy: str.endIndex) ?? str.endIndex
-                case .literal(_, let val):
-                    let regex = NSRegularExpression.escapedPattern(for: val)
-                    let substr = String(str[startIndex...])
-                    let matches = matches(in: substr, regex: regex)
-
-                    guard !matches.isEmpty else { return nil }
-
-                    startIndex = str.index(startIndex, offsetBy: matches[0].count, limitedBy: str.endIndex) ?? str.endIndex
-            }
+        for (offset, element) in parameters.enumerated() {
+            guard case .parameter(_, let parameterName) = element,
+                  let lookup = Self.parameterLookup[parameterName] else { return nil }
+            let strMatches = matches[offset].map(\.match)
+            match.append(element, matchedText: lookup.selectMatch(strMatches))
         }
+
         return match
     }
 
-    private func matches(in str: String, regex: String) -> [String] {
+    private func matches(in str: String, regex: String) -> [(Range<String.Index>, String)] {
         do {
             let regex = try NSRegularExpression(pattern: regex)
             let results = regex.matches(in: str,
                                         range: NSRange(str.startIndex..., in: str))
             guard let firstResult = results.first else { return [] }
-            var matches = [String]()
+            var matches = [(Range<String.Index>, String)]()
             for i in 0..<firstResult.numberOfRanges {
                 if let range = Range(firstResult.range(at: i), in: str) {
-                    matches.append(String(str[range]))
+                    matches.append((range, String(str[range])))
                 }
             }
             return matches

@@ -14,11 +14,10 @@ public struct StringParameter: Parameter {
     public func convert(input: String) throws -> String { input }
 
     public func selectMatch(_ matches: [String]) -> String {
-        // The regex for this string will return 3 matches
-        // The first is the whole match
-        // The second includes quotes
-        // The third removes those quotes
-        matches[2]
+        // The regex for this string will return 2 matches
+        // The first includes quotes
+        // The second removes those quotes
+        matches[1]
     }
 }
 
