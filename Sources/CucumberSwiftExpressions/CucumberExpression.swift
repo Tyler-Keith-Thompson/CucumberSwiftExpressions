@@ -46,8 +46,12 @@ public struct CucumberExpression: ExpressibleByStringLiteral {
     public func match(in str: String) -> Match? {
         let match = Match()
         let parameters = tokens.filter { $0.isParameter }
-        let matches = matches(in: str, regex: regex)
-            .dropFirst()
+        let regexMatches = matches(in: str, regex: regex)
+        
+        guard !regexMatches.isEmpty else { return nil }
+        
+        let matches = regexMatches
+            .dropFirst() // first match is the whole string
                 .reduce(into: [[(range: Range<String.Index>, match: String)]]()) { allMatches, tup in
                     let (range, strMatch) = tup
                     if let lastRange = allMatches.last?.first?.range,

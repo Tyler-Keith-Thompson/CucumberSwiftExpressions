@@ -4,6 +4,13 @@ import XCTest
 import CucumberSwiftExpressions
 
 final class CucumberSwiftExpressionsTests: XCTestCase {
+    func testPlainCucumberExpression() {
+        let expression: CucumberExpression = "the member has A"
+        XCTAssertNotNil(expression.match(in: "the member has A"))
+        XCTAssertNil(expression.match(in: "the member has B"))
+        XCTAssertNil(expression.match(in: "the member has C"))
+    }
+    
     func testCucumberExpressionGeneratesCorrectRegexForOptional() {
         let expression = CucumberExpression(#"There were 3 flight(s) from LAX."#)
         XCTAssertEqual(expression.regex, #"^There were 3 flight(?:s)? from LAX\.$"#)
